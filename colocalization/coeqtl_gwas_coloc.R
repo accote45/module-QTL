@@ -19,7 +19,7 @@ coeqtl$var.qtl <- (coeqtl$V8)^2
 coeqtl$SNP <- coeqtl$V9
 coeqtl$maf <- coeqtl$V6
 
-pc.sd <- read.table(paste0("/sc/arion/projects/psychgen/alanna/cibersort/cmc/coeqtl/",module,".txtsigpc_sd"), header=FALSE)
+pc.sd <- read.table(paste0(module,".txtsigpc_sd"), header=FALSE)
 names(pc.sd) <- as.matrix(pc.sd[1,])
 pc.sd <- as.data.frame(pc.sd)
 pc.sd <- pc.sd[-1, , drop=FALSE]
