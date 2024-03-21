@@ -15,24 +15,23 @@ library(plyr)
 options(stringsAsFactors = FALSE);
 enableWGCNAThreads()
 
-setwd("/sc/arion/projects/psychgen/HUCKINS_LAB_DONT_DELETE/alanna/cibersort/module_preservation/cmc_rosmap")
-ge.mat <- read.table("/sc/arion/projects/psychgen/HUCKINS_LAB_DONT_DELETE/alanna/cibersort/knowncovar_+cellprop_adj_quantnorm_outlierrem_winsorized_expression_cmc1_euro.txt.gz")
+ge.mat <- read.table("knowncovar_+cellprop_adj_quantnorm_outlierrem_winsorized_expression_cmc1_euro.txt.gz")
 cmc.dat <- as.data.frame(t(ge.mat))
-ge.mat <- read.table("/sc/arion/projects/psychgen/HUCKINS_LAB_DONT_DELETE/alanna/cibersort/rosmap/knowncovar_+cellprop_adj_outlierrem_winsorized_expression_rosmap_euro.txt.gz")
+ge.mat <- read.table("knowncovar_+cellprop_adj_outlierrem_winsorized_expression_rosmap_euro.txt.gz")
 rosmap.dat <- as.data.frame(t(ge.mat))
 
-anc <- read.table("/sc/arion/projects/psychgen/DATA/ROSMAP_psychgen2/genotype/ancestry/rosmap_ancestry_determination.txt", header=TRUE)
-imp_ids <- read.table("/sc/arion/projects/psychgen/DATA/ROSMAP_psychgen2/genotype/raw/ROSMAP_arrayGenotype.fam", header=FALSE)
+anc <- read.table("rosmap_ancestry_determination.txt", header=TRUE)
+imp_ids <- read.table("ROSMAP_arrayGenotype.fam", header=FALSE)
 imp_ids$sample <- imp_ids$V2
 merged <- merge(imp_ids, anc, by="sample")
 merged$final <- paste0(merged$V1,"_",merged$sample)
 merged <- merged[!is.na(merged$assignment),]
-key <- read.csv("/sc/arion/projects/psychgen/DATA/ROSMAP_psychgen2/metadata/ROSMAP_IDkey.csv") # gwas_id, rnaseq_id, etc
+key <- read.csv("ROSMAP_IDkey.csv") # gwas_id, rnaseq_id, etc
 key$sample <- key$gwas_id
 master <- merge(merged,key,by="sample")
 master$rnaseq_id_fin <- paste0("X", master$rnaseq_id)
 rosmap.fin <- rosmap.dat[rownames(rosmap.dat) %in% master$rnaseq_id_fin,]
-geno <- fread(paste0("/sc/arion/projects/psychgen/DATA/ROSMAP_psychgen/wgs/chr22.doseonly.vcf"),header=TRUE)
+geno <- fread(paste0("chr22.doseonly.vcf"),header=TRUE)
 geno$ID <- paste0(geno$"#CHROM",":",geno$POS)
 geno <- as.data.frame(geno) %>% column_to_rownames("ID")
 geno <- geno[,-c(1:4)]
@@ -54,7 +53,7 @@ rosmap.fin <- rosmap.fin[rownames(rosmap.fin) %in% colnames(geno.fin),]
 
 
 # load module labels, and label for unassigned genes
-colorCMC1 = read.table("/sc/arion/projects/psychgen/HUCKINS_LAB_DONT_DELETE/alanna/cibersort/cmc/megena/master_module_file.txt",header=T)
+colorCMC1 = read.table("master_module_file.txt",header=T)
 colorCMC1 <- colorCMC1[colorCMC1$gene.names %in% colnames(cmc.dat),]
 index <- colnames(cmc.dat)[!(colnames(cmc.dat) %in% colorCMC1$gene.names)]
 index2 <- as.data.frame(index)
