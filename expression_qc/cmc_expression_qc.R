@@ -5,8 +5,6 @@
 ####################################################################################
 ### read in CMC expr, complete preliminary QC
 
-setwd("/sc/arion/projects/psychgen/alanna/qtls_coexpression_cmc/data")
-
 library(tidyverse)
 library(biomaRt)
 library(plyr)
@@ -72,8 +70,6 @@ demos.sort <- demos.fin[order(demos.fin$RNAseq.Sample_RNA_ID),]
 count.sort <- count.master[ , order(names(count.master))]
 
 y = DGEList( count.sort, genes=rownames(count.sort) )
-#isexpr = rowSums(cpm(count.sort)>1) >= 0.5*ncol(count.sort)
-#y <- y[isexpr,,keep.lib.sizes=FALSE]
 y <- calcNormFactors(y, method="TMM")
 dim(y)
 
@@ -150,7 +146,7 @@ removevec=c("MSSM_RNA_PFC_139", "MSSM_RNA_PFC_133", "MSSM_RNA_PFC_163", "MSSM_RN
 overlap1=is.element(dimnames(tmm.cpm.expr)[[2]],removevec)
 datrest2=tmm.cpm.expr[,!overlap1]
 dim(datrest2)
-# [1] 20395 492
+
 IAC=cor(datrest2,use="p")
 png("~/www/iac_histogram_afteroutlierremoval_cmc1.png")
 hist(IAC,sub=paste("mean=",format(mean(IAC[upper.tri(IAC)]),digits=3))) 
@@ -186,7 +182,7 @@ removevec=c("MSSM_RNA_PFC_139", "MSSM_RNA_PFC_133", "MSSM_RNA_PFC_163", "MSSM_RN
 overlap1=is.element(dimnames(tmm.cpm.expr)[[2]],removevec)
 datrest2=tmm.cpm.expr[,!overlap1]
 dim(datrest2)
-# [1] 20395 489
+
 IAC=cor(datrest2,use="p")
 png("~/www/iac_histogram_afteroutlierremoval_round3_cmc1.png")
 hist(IAC,sub=paste("mean=",format(mean(IAC[upper.tri(IAC)]),digits=3))) 
@@ -223,7 +219,7 @@ removevec=c("MSSM_RNA_PFC_329","MSSM_RNA_PFC_139", "MSSM_RNA_PFC_133", "MSSM_RNA
 overlap1=is.element(dimnames(tmm.cpm.expr)[[2]],removevec)
 datrest2=tmm.cpm.expr[,!overlap1]
 dim(datrest2)
-# [1] 20395 488
+
 IAC=cor(datrest2,use="p")
 png("~/www/iac_histogram_afteroutlierremoval_round4_cmc1.png")
 hist(IAC,sub=paste("mean=",format(mean(IAC[upper.tri(IAC)]),digits=3))) 
@@ -332,7 +328,7 @@ plotVarPart( vp )
 dev.off()
 
 
-write.table(varPart, "/sc/arion/projects/psychgen/alanna/cibersort/cmc_varpart_output.txt", quote=FALSE)
+write.table(varPart, "cmc_varpart_output.txt", quote=FALSE)
 
 
 
@@ -370,7 +366,7 @@ plotVarPart( vp )
 dev.off()
 
 
-write.table(varPart, "/sc/arion/projects/psychgen/alanna/cibersort/cmc_varpart_output_cells+techcovs.txt", quote=FALSE)
+write.table(varPart, "cmc_varpart_output_cells+techcovs.txt", quote=FALSE)
 
 
 
@@ -416,7 +412,7 @@ plotVarPart( vp )
 dev.off()
 
 
-write.table(varPart, "/sc/arion/projects/psychgen/alanna/cibersort/cmc_varpart_output_cells+techcovs.txt", quote=FALSE)
+write.table(varPart, "cmc_varpart_output_cells+techcovs.txt", quote=FALSE)
 
 
 
@@ -446,7 +442,7 @@ ADJUSTED.FIT = lmFit(VOOM.GENE_EXPRESSION)
   
 # Residuals after normalisation
 RESIDUAL.GENE_EXPRESSION = residuals.MArrayLM(ADJUSTED.FIT, VOOM.GENE_EXPRESSION$E)
-write.table(RESIDUAL.GENE_EXPRESSION, "/sc/arion/projects/psychgen/alanna/cibersort/knowncovar_+cellprop_adj_quantnorm_outlierrem_winsorized_expression_cmc1_euro.txt")
+write.table(RESIDUAL.GENE_EXPRESSION, "knowncovar_+cellprop_adj_quantnorm_outlierrem_winsorized_expression_cmc1_euro.txt")
 
 
 
