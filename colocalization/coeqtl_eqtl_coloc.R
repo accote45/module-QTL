@@ -6,13 +6,9 @@ args<-commandArgs(trailingOnly=TRUE)
 locus.name=args[1]
 eqtl.name=args[2]
 
-locus.name="chr19_37915152_38915152_c1_1149"
-eqtl.name="ENSG00000277027_chr19_37915152_38915152_c1_1149"
 temp <- strsplit(eqtl.name,split="_",fixed=TRUE)
 module=paste0(temp[[1]][5],"_",temp[[1]][6])
 gene=temp[[1]][1]
-
-setwd('/sc/arion/projects/psychgen/HUCKINS_LAB_DONT_DELETE/alanna/cibersort/cmc/coloc/coloc_single_eqtl')
 
 eqtl <- read.table(paste0(eqtl.name,".z"), header=TRUE)
 coeqtl <- read.table(paste0(locus.name,"_for_coloc.txt"), header=FALSE)
@@ -26,7 +22,7 @@ coeqtl$beta.coeqtl <- coeqtl$beta
 coeqtl$var.coeqtl <- (coeqtl$beta/coeqtl$t.stat)^2
 coeqtl$SNP <- paste0(coeqtl$chr,":",coeqtl$pos,":",coeqtl$A1,":",coeqtl$A2)
 
-pc.sd <- read.table(paste0("/sc/arion/projects/psychgen/HUCKINS_LAB_DONT_DELETE/alanna/cibersort/cmc/coeqtl/",module,".txtsigpc_sd.gz"), header=FALSE)
+pc.sd <- read.table(paste0(module,".txtsigpc_sd.gz"), header=FALSE)
 names(pc.sd) <- as.matrix(pc.sd[1,])
 pc.sd <- as.data.frame(pc.sd)
 pc.sd <- pc.sd[-1, , drop=FALSE]
@@ -36,7 +32,7 @@ master <- merge(coeqtl, eqtl, by="SNP")
 master <- master[!duplicated(master$SNP),]
 
 # get variance of eqtl gene
-ge.mat <- read.table("/sc/arion/projects/psychgen/HUCKINS_LAB_DONT_DELETE/alanna/cibersort/knowncovar_+cellprop_adj_quantnorm_outlierrem_winsorized_expression_cmc1_euro.txt.gz", header=TRUE, stringsAsFactors=FALSE)
+ge.mat <- read.table("knowncovar_+cellprop_adj_quantnorm_outlierrem_winsorized_expression_cmc1_euro.txt.gz", header=TRUE, stringsAsFactors=FALSE)
 gene.sd <- sd(ge.mat[rownames(ge.mat) %in% gene,])
 
 dataset1=list(beta=master$beta.coeqtl, varbeta=master$var.coeqtl, n=488, type="quant", sdY=as.numeric(as.character(pc.sd[[1]])), snp=as.character(master$SNP))
