@@ -4,8 +4,6 @@
 ####################################################################################
 ### read in HBCC expr, complete preliminary QC
 
-setwd("/sc/arion/projects/psychgen/alanna/qtls_coexpression_cmc/data")
-
 library(tidyverse)
 library(biomaRt)
 library(plyr)
@@ -153,7 +151,7 @@ y$counts = raw.wins.mat
 ################################################################
 ## correlation between cibersortx proportions
 
-master2 <- read.csv("/sc/arion/projects/psychgen/alanna/cibersort/hbcc/CIBERSORTx_Job19_Results.csv")
+master2 <- read.csv("CIBERSORTx_Job19_Results.csv")
 master2$RNAseq.Sample_RNA_ID <- gsub("X.","",master2$Mixture)
 
 index <- colnames(y$counts)
@@ -172,7 +170,7 @@ dev.off()
 
 # remove collinear variables, repeat
 C <- as.data.frame(C)
-write.table(C,"/sc/arion/projects/psychgen/alanna/cibersort/hbcc_corrs.txt", quote=FALSE)
+write.table(C,"hbcc_corrs.txt", quote=FALSE)
 
 
 
@@ -212,7 +210,7 @@ plotVarPart( vp )
 dev.off()
 
 
-write.table(varPart, "/sc/arion/projects/psychgen/alanna/cibersort/hbcc_varpart_output.txt", quote=FALSE)
+write.table(varPart, "hbcc_varpart_output.txt", quote=FALSE)
 
 
 
@@ -253,7 +251,7 @@ plotVarPart( vp )
 dev.off()
 
 
-write.table(varPart, "/sc/arion/projects/psychgen/alanna/cibersort/hbcc_varpart_output_cells+techcovs.txt", quote=FALSE)
+write.table(varPart, "hbcc_varpart_output_cells+techcovs.txt", quote=FALSE)
 
 
 
@@ -299,7 +297,7 @@ plotVarPart( vp )
 dev.off()
 
 
-write.table(varPart, "/sc/arion/projects/psychgen/alanna/cibersort/hbcc_varpart_output_cells+techcovs.txt", quote=FALSE)
+write.table(varPart, "hbcc_varpart_output_cells+techcovs.txt", quote=FALSE)
 
 
 
@@ -332,7 +330,7 @@ ADJUSTED.FIT = lmFit(VOOM.GENE_EXPRESSION)
   
 # Residuals after normalisation
 RESIDUAL.GENE_EXPRESSION = residuals.MArrayLM(ADJUSTED.FIT, VOOM.GENE_EXPRESSION$E)
-write.table(RESIDUAL.GENE_EXPRESSION, "/sc/arion/projects/psychgen/alanna/cibersort/knowncovar_+cellprop_adj_quantnorm_outlierrem_winsorized_expression_hbcc_euro.txt")
+write.table(RESIDUAL.GENE_EXPRESSION, "knowncovar_+cellprop_adj_quantnorm_outlierrem_winsorized_expression_hbcc_euro.txt")
 
 
 
