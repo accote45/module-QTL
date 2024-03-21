@@ -20,15 +20,13 @@ coeqtl=args[1]
 module=args[2]
 chr=args[3]
 
-setwd('/sc/arion/projects/psychgen/HUCKINS_LAB_DONT_DELETE/alanna/cibersort/cmc/ecaviar/coloc_single_eqtl')
-
-coeqtl.dat <- read.table(paste0('/sc/arion/projects/psychgen/HUCKINS_LAB_DONT_DELETE/alanna/cibersort/cmc/coeqtl_maf0.05/',coeqtl,'_for_coloc.txt'))
+coeqtl.dat <- read.table(paste0(coeqtl,'_for_coloc.txt'))
 colnames(coeqtl.dat) <- c("CHR","POS","A1","A2","ProbeID","V6","BETA","t.stat","PVAL","FDR","MAF")
 coeqtl.dat$SNP <- paste0(coeqtl.dat$CHR,":",coeqtl.dat$POS,":",coeqtl.dat$A1,":",coeqtl.dat$A2)
 
 # find significant cis/trans eQTLs for coeQTL module
-eqtl.sig <- read.table('/sc/arion/projects/psychgen/HUCKINS_LAB_DONT_DELETE/alanna/cibersort/cmc/single_eqtls/single_gene_eqtl_allmodgenes/master_sig_maf0.05.txt',header=T)
-module.genes <- read.table(paste0("/sc/arion/projects/psychgen/HUCKINS_LAB_DONT_DELETE/alanna/cibersort/cmc/megena/",module,".txt"),header=T)
+eqtl.sig <- read.table('master_sig_maf0.05.txt',header=T)
+module.genes <- read.table(paste0(module,".txt"),header=T)
 eqtl.sig.modgenes <- eqtl.sig[eqtl.sig$gene %in% module.genes[,1],]
 
 # if sig eSNPs for coeQTL and module eQTLs do not overlap, end job
@@ -37,11 +35,11 @@ if(length(intersect(coeqtl.dat$SNP,eqtl.sig.modgenes$SNP))==0) {
 }
 
 # for each eQTL eGene, create eCaviar input file
-ciseqtl <- fread(paste0('/sc/arion/projects/psychgen/HUCKINS_LAB_DONT_DELETE/alanna/cibersort/cmc/single_eqtls/single_gene_eqtl_allmodgenes/',chr,'_single_eqtl_cmc_EA_cis.txt'))
-transeqtl <- fread(paste0('/sc/arion/projects/psychgen/HUCKINS_LAB_DONT_DELETE/alanna/cibersort/cmc/single_eqtls/single_gene_eqtl_allmodgenes/',chr,'_single_eqtl_cmc_EA_trans.txt'))
+ciseqtl <- fread(paste0(chr,'_single_eqtl_cmc_EA_cis.txt'))
+transeqtl <- fread(paste0(chr,'_single_eqtl_cmc_EA_trans.txt'))
 genes <- unique(eqtl.sig.modgenes$gene)
 
-loadings <- read.table(paste0('/sc/arion/projects/psychgen/HUCKINS_LAB_DONT_DELETE/alanna/cibersort/cmc/pc_modgene_corrs/',module,".txt_pc_modgene_corrs.txt.gz"))
+loadings <- read.table(paste0(module,".txt_pc_modgene_corrs.txt.gz"))
 loadings$sign <- sign(loadings$PC)
 
 eqtl.input <- list()
@@ -76,8 +74,6 @@ done
 #### create LD matrices in R
 library(tidyverse)
 library(data.table)
-
-setwd('/sc/arion/projects/psychgen/HUCKINS_LAB_DONT_DELETE/alanna/cibersort/cmc/ecaviar/coloc_single_eqtl')
 
 ##### read in coeqtl files
 filenames <- list.files(path="/sc/arion/projects/psychgen/HUCKINS_LAB_DONT_DELETE/alanna/cibersort/cmc/coeqtl_maf0.05",pattern="*for_coloc.txt",full.names=T)
@@ -127,8 +123,8 @@ for (i in 1:length(corrs)){
 
 ls ENS*.z | awk -F"_" '{print $0" "$2"_"$3"_"$4"_"$5"_"$6}' | sed 's/.z//g' > job.file.ecaviar.txt
 
-for i in $(ls /sc/arion/projects/psychgen/HUCKINS_LAB_DONT_DELETE/alanna/cibersort/cmc/coeqtl_maf0.05/*for_coloc.txt | xargs -n1 basename); do
-awk '{print $1":"$2":"$3":"$4" "$8}' ${i} > /sc/arion/projects/psychgen/HUCKINS_LAB_DONT_DELETE/alanna/cibersort/cmc/ecaviar/coloc_single_eqtl/${i}.z
+for i in $(ls *for_coloc.txt | xargs -n1 basename); do
+awk '{print $1":"$2":"$3":"$4" "$8}' ${i} > ${i}.z
 done
 
 
