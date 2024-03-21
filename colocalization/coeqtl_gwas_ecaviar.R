@@ -9,9 +9,7 @@
 library(tidyverse)
 library(data.table)
 
-setwd("/sc/arion/projects/psychgen/HUCKINS_LAB_DONT_DELETE/alanna/cibersort/cmc/ecaviar/coloc_enigma_surfarea")
-
-gwas <- read.table("/sc/arion/projects/psychgen/HUCKINS_LAB_DONT_DELETE/alanna/cibersort/cmc/ecaviar/gwas/ENIGMA3_mixed_se_wo_Mean_Full_SurfArea_20190429.hg38.txt",header=T)
+gwas <- read.table("ENIGMA3_mixed_se_wo_Mean_Full_SurfArea_20190429.hg38.txt",header=T)
 gwas <- as.data.frame(gwas)
 
 ##### remove dup snps from enigma gwas (keep only snps not indels)
@@ -92,8 +90,6 @@ for (i in 1:length(gwas.df.fin)) {
 # create LD matrices
 library(tidyverse)
 library(data.table)
-
-setwd('/sc/arion/projects/psychgen/HUCKINS_LAB_DONT_DELETE/alanna/cibersort/cmc/ecaviar/coloc_enigma_surfarea_TEST')
 
 # read in dosage
 dat <- list()
