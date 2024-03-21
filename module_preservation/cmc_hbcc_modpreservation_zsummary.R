@@ -13,16 +13,14 @@ library(plyr)
 options(stringsAsFactors = FALSE);
 enableWGCNAThreads()
 
-setwd("/sc/arion/projects/psychgen/HUCKINS_LAB_DONT_DELETE/alanna/cibersort/module_preservation/cmc_hbcc")
-ge.mat <- read.table("/sc/arion/projects/psychgen/HUCKINS_LAB_DONT_DELETE/alanna/cibersort/knowncovar_+cellprop_adj_quantnorm_outlierrem_winsorized_expression_cmc1_euro.txt.gz")
+ge.mat <- read.table("knowncovar_+cellprop_adj_quantnorm_outlierrem_winsorized_expression_cmc1_euro.txt.gz")
 cmc.dat <- as.data.frame(t(ge.mat))
-ge.mat <- read.table("/sc/arion/projects/psychgen/HUCKINS_LAB_DONT_DELETE/alanna/cibersort/knowncovar_+cellprop_adj_quantnorm_outlierrem_winsorized_expression_hbcc_euro.txt.gz", header=TRUE, stringsAsFactors=FALSE)
+ge.mat <- read.table("knowncovar_+cellprop_adj_quantnorm_outlierrem_winsorized_expression_hbcc_euro.txt.gz", header=TRUE, stringsAsFactors=FALSE)
 hbcc.dat <- as.data.frame(t(ge.mat))
 
-geno <- read.table(paste0("/sc/arion/projects/psychgen/HUCKINS_LAB_DONT_DELETE/DATA/HBCC/imputed/combined/chr22.vcf"), header=TRUE)
+geno <- read.table(paste0("chr22.vcf"), header=TRUE)
 geno <- geno[,-c(2:5)]
-#key <- read.table("/sc/arion/projects/psychgen/alanna/qtls_coexpression_cmc/data/CMC2.mappings.su.gz")
-key2 <- read.csv('/sc/arion/projects/psychgen/DATA/HBCC/demos.master.EA.amanda.ancestry.csv.gz')
+key2 <- read.csv('demos.master.EA.amanda.ancestry.csv.gz')
 key2$ID <- paste0("X",key2$ID)
 
 cols <- key2[match(colnames(geno), key2[["ID"]], nomatch=0), 'RNAseq.Sample_RNA_ID']
@@ -34,7 +32,7 @@ hbcc.fin <- hbcc.dat[rownames(hbcc.dat) %in% colnames(geno),]
 
 
 # load module labels, and label for unassigned genes
-colorCMC1 = read.table("/sc/arion/projects/psychgen/HUCKINS_LAB_DONT_DELETE/alanna/cibersort/cmc/megena/master_module_file.txt",header=T)
+colorCMC1 = read.table("master_module_file.txt",header=T)
 colorCMC1 <- colorCMC1[colorCMC1$gene.names %in% colnames(cmc.dat),]
 index <- colnames(cmc.dat)[!(colnames(cmc.dat) %in% colorCMC1$gene.names)]
 index2 <- as.data.frame(index)
