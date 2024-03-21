@@ -19,7 +19,7 @@ files2 <- files2[!grepl(c("genes.txt.gz"),files2)]
 files2 <- files2[!grepl(c("master_module_file.txt"),files2)]
 files2 <- files2[!grepl(c("module.table.txt.gz"),files2)]
 
-expr <- read.table("/sc/arion/projects/psychgen/HUCKINS_LAB_DONT_DELETE/alanna/cibersort/knowncovar_+cellprop_adj_quantnorm_outlierrem_winsorized_expression_cmc1_euro.txt.gz", header=TRUE, stringsAsFactors=FALSE)
+expr <- read.table("knowncovar_+cellprop_adj_quantnorm_outlierrem_winsorized_expression_cmc1_euro.txt.gz", header=TRUE, stringsAsFactors=FALSE)
 
 density <- list()
 
