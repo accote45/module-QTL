@@ -21,11 +21,11 @@ library(pamr)
 
 # read in major files
 
-expr <- read.table("/sc/arion/projects/psychgen/DATA/ROSMAP_psychgen/RNA_seq/raw/ROSMAP_all_counts_matrix.txt.gz", header=TRUE)
-meta.clinical <- read.csv("/sc/arion/projects/psychgen/DATA/ROSMAP_psychgen/metadata/ROSMAP_Clinical_2019-05_v3.csv") #projid, individualID
-meta.rna <- read.csv("/sc/arion/projects/psychgen/DATA/ROSMAP_psychgen/metadata/ROSMAP_assay_RNAseq_metadata.csv") #specimenID
-meta.bio <- read.csv("/sc/arion/projects/psychgen/DATA/ROSMAP_psychgen/metadata/ROSMAP_biospecimen_metadata.csv") #individualID ,specimenID
-key <- read.csv("/sc/arion/projects/psychgen/DATA/ROSMAP_psychgen/metadata/ROSMAP_IDkey.csv") # gwas_id, rnaseq_id, etc
+expr <- read.table("ROSMAP_all_counts_matrix.txt.gz", header=TRUE)
+meta.clinical <- read.csv("ROSMAP_Clinical_2019-05_v3.csv") #projid, individualID
+meta.rna <- read.csv("ROSMAP_assay_RNAseq_metadata.csv") #specimenID
+meta.bio <- read.csv("ROSMAP_biospecimen_metadata.csv") #individualID ,specimenID
+key <- read.csv("ROSMAP_IDkey.csv") # gwas_id, rnaseq_id, etc
 
 key$specimenID <- key$rnaseq_id
 
@@ -50,7 +50,7 @@ temp2 <- meta.master.temp %>% filter( grepl("dorsolateral",tissue))
 meta.master <- temp2 %>% filter(grepl("bulk",nucleicAcidSource))
 
 # subset to only sampel of genotype-derived european ancestry
-anc <- read.table("/sc/arion/projects/psychgen/DATA/ROSMAP_psychgen2/genotype/ancestry/rosmap_ancestry_determination.txt", header=TRUE)
+anc <- read.table("rosmap_ancestry_determination.txt", header=TRUE)
 anc$gwas_id <- anc$sample
 anc.merge <- join(anc, key, by="gwas_id")
 anc.merge$specimenID <- anc.merge$rnaseq_id
@@ -118,7 +118,7 @@ p <- p + scale_shape_manual(values=c(3,22,21,24,5,9))
 p <- p + theme_bw() %+replace% theme(legend.position="right")
 p
 dev.off()
-# For ROSMAP cohort , remove one sample based on inspection of pc plot, specimen ID = 180_120424
+# For ROSMAP cohort , remove one sample based on inspection of pc plot
 plotdata <- plotdata[order(plotdata$PC2),]
 tail(plotdata)
 
@@ -258,7 +258,7 @@ plotVarPart( vp )
 dev.off()
 
 
-write.table(varPart, "/sc/arion/projects/psychgen/alanna/cibersort/rosmap/rosmap_varpart_output.txt", quote=FALSE)
+write.table(varPart, "rosmap_varpart_output.txt", quote=FALSE)
 
 
 ################################
@@ -295,7 +295,7 @@ plotVarPart( vp )
 dev.off()
 
 
-write.table(varPart, "/sc/arion/projects/psychgen/alanna/cibersort/rosmap/rosmap_varpart_output_cells+techcovs.txt", quote=FALSE)
+write.table(varPart, "rosmap_varpart_output_cells+techcovs.txt", quote=FALSE)
 
 
 
@@ -338,7 +338,7 @@ plotVarPart( vp )
 dev.off()
 
 
-write.table(varPart, "/sc/arion/projects/psychgen/alanna/cibersort/rosmap/rosmap_varpart_output_cells+techcovs.txt", quote=FALSE)
+write.table(varPart, "rosmap_varpart_output_cells+techcovs.txt", quote=FALSE)
 
 
 
@@ -351,11 +351,11 @@ write.table(varPart, "/sc/arion/projects/psychgen/alanna/cibersort/rosmap/rosmap
 
 ### Normalisation (with ancestry adjustment)
 
-anc <- read.table("/sc/arion/projects/psychgen/DATA/ROSMAP_psychgen2/genotype/ancestry/ROSMAP_gemtools_ancestryPCs.txt")
+anc <- read.table("ROSMAP_gemtools_ancestryPCs.txt")
 rownames(anc) <- sub('.*\\_', '', rownames(anc))
 anc <- anc %>% rownames_to_column("gwas_id")
 
-key <- read.csv("/sc/arion/projects/psychgen/DATA/ROSMAP_psychgen2/metadata/ROSMAP_IDkey.csv") #projid, rnaseq_id
+key <- read.csv("ROSMAP_IDkey.csv") #projid, rnaseq_id
 key.sub <- key[,c(2,5)]
 key.sub$specimenID <- key.sub$rnaseq_id
 
@@ -387,6 +387,6 @@ ADJUSTED.FIT = lmFit(VOOM.GENE_EXPRESSION)
   
 # Residuals after normalisation
 RESIDUAL.GENE_EXPRESSION = residuals.MArrayLM(ADJUSTED.FIT, VOOM.GENE_EXPRESSION$E)
-write.table(RESIDUAL.GENE_EXPRESSION, "/sc/arion/projects/psychgen/alanna/cibersort/rosmap/knowncovar_+cellprop_adj_outlierrem_winsorized_expression_rosmap_euro.txt")
+write.table(RESIDUAL.GENE_EXPRESSION, "knowncovar_+cellprop_adj_outlierrem_winsorized_expression_rosmap_euro.txt")
 
 
